@@ -8,6 +8,7 @@ import { ImageUp } from "lucide-react";
 import { FoodType } from "@/types/foodType";
 import { postFood, updateFood } from "@/libs/api";
 import { useMutation, useQueryClient } from "react-query";
+import { revalidatePath } from "next/cache";
 
 const formContents: { title: string; type: string; label: string }[] = [
   { title: "name", type: "input", label: "Name of Food" },
@@ -104,6 +105,7 @@ export default function FoodForm({
     if (componentFor === "put") {
       if (item?._id) {
         mutate({ id: item?._id, formData });
+        revalidatePath("/");
       }
     }
     setLoading(false);
