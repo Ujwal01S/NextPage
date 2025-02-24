@@ -45,7 +45,7 @@ export async function getStaticProps() {
       props: {
         events: filteredItem,
       },
-      revalidate: 10,
+      revalidate: 1,
     };
   } catch (error) {
     return {

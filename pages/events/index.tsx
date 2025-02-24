@@ -20,8 +20,8 @@ export default function EventDetailPage({ events }: EventDetailPagePops) {
     queryKey: ["getFood"],
     initialData: events,
     staleTime: 0,
-    refetchOnWindowFocus: true,
-    refetchOnMount: true,
+    // refetchOnWindowFocus: true,
+    // refetchOnMount: true,
   });
 
   return (
