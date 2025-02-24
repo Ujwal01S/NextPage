@@ -70,6 +70,7 @@ export default function FoodForm({
       if (setOpen) {
         setOpen(false);
       }
+      reset();
       setLoading(false);
     },
   });
@@ -82,6 +83,7 @@ export default function FoodForm({
     mutationFn: (formData: FormData) => postFood(formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getFood"] });
+      reset();
       console.log(data);
     },
   });
@@ -105,7 +107,6 @@ export default function FoodForm({
       }
     }
     setLoading(false);
-    reset();
   };
 
   const image = watch("image");

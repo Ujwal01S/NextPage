@@ -46,6 +46,7 @@ export default function EventDetailPage({ event, id }: SingleFoodType) {
   if (isLoading || !eventData || !event) {
     return <GetFallBackLoading />;
   }
+
   return (
     <div className="w-full flex justify-center">
       <div className="w-full flex flex-col items-center">
@@ -88,6 +89,9 @@ export default function EventDetailPage({ event, id }: SingleFoodType) {
           </div>
           <h2 className="text-gray-700 font-medium">
             Food Type :{event.foodType}
+          </h2>
+          <h2 className="text-gray-700 font-medium">
+            Native From :{event.native}
           </h2>
           <h4 className="text-gray-700 font-medium">
             Cooking Time : {event.cookTime} min
