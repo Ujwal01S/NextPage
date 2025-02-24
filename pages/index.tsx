@@ -5,6 +5,7 @@ import React from "react";
 
 import { getAllFood } from "@/libs/api";
 import { FoodType } from "@/types/foodType";
+import { useQuery } from "react-query";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,6 +15,12 @@ interface PropsType {
 
 export default function Home({ events }: PropsType) {
   // console.log({ events });
+  const { data: eventData } = useQuery({
+    queryFn: () => getAllFood(),
+    queryKey: ["getFood"],
+    initialData: events,
+    select: (data) => data.filter((item: FoodType) => item.isFeatured === true),
+  });
   return (
     <React.Fragment>
       <Head>
@@ -24,7 +31,7 @@ export default function Home({ events }: PropsType) {
         />
       </Head>
       <main className={`w-full flex justify-center pt-10`}>
-        <EventList items={events} listFor="show" />
+        <EventList items={eventData} listFor="show" />
       </main>
     </React.Fragment>
   );
