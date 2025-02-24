@@ -61,7 +61,7 @@ export default function FoodForm({
     imageInputRef.current?.click();
   }
 
-  const { mutate } = useMutation({
+  const { mutate, isLoading: updateLoading } = useMutation({
     mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
       updateFood(id, formData),
     onSuccess: () => {
@@ -164,7 +164,7 @@ export default function FoodForm({
           {image?.slice(0, 10)}
         </p>
       )}
-      {isLoading ? (
+      {isLoading || updateLoading ? (
         <button
           type="button"
           className={`bg-slate-500 text-white font-semibold py-2 w-fit px-8 mt-4 rounded-md mx-auto `}
