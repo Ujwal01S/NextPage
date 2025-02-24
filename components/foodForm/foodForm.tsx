@@ -105,7 +105,6 @@ export default function FoodForm({
     if (componentFor === "put") {
       if (item?._id) {
         mutate({ id: item?._id, formData });
-        revalidatePath("/");
       }
     }
     setLoading(false);
