@@ -6,7 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImageUp } from "lucide-react";
 import { FoodType } from "@/types/foodType";
-import { updateFood } from "@/libs/api";
+import { postFood, updateFood } from "@/libs/api";
 import { useMutation, useQueryClient } from "react-query";
 
 const formContents: { title: string; type: string; label: string }[] = [
@@ -66,10 +66,23 @@ export default function FoodForm({
       updateFood(id, formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["singleFood", item?._id] });
+      queryClient.invalidateQueries({ queryKey: ["getFood"] });
       if (setOpen) {
         setOpen(false);
       }
       setLoading(false);
+    },
+  });
+
+  const {
+    mutate: postMutate,
+    isLoading,
+    data,
+  } = useMutation({
+    mutationFn: (formData: FormData) => postFood(formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getFood"] });
+      console.log(data);
     },
   });
   const onSubmit = (data: z.infer<typeof foodFormSchema>) => {
@@ -83,15 +96,7 @@ export default function FoodForm({
 
     setLoading(true);
     if (componentFor === "post") {
-      fetch("/api/sharefood", {
-        method: "POST",
-        body: formData, // Send as FormData
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-        })
-        .catch(() => setLoading(false));
+      postMutate(formData);
     }
 
     if (componentFor === "put") {
@@ -102,8 +107,6 @@ export default function FoodForm({
     setLoading(false);
     reset();
   };
-
-  console.log({ loading });
 
   const image = watch("image");
   return (
@@ -160,7 +163,7 @@ export default function FoodForm({
           {image?.slice(0, 10)}
         </p>
       )}
-      {loading ? (
+      {isLoading ? (
         <button
           type="button"
           className={`bg-slate-500 text-white font-semibold py-2 w-fit px-8 mt-4 rounded-md mx-auto `}

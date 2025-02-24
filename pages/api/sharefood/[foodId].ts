@@ -26,9 +26,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
     const foodId = req.query.foodId;
-
+    console.log("HERE");
     try {
         await Food.findByIdAndDelete(foodId)
+        res.status(200).json({ message: "Successfully deleted" })
     } catch (error) {
         res.status(500).json({
             error: "Failed to delete",

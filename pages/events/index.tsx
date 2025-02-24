@@ -2,7 +2,7 @@ import EventList from "@/components/events/eventList";
 import { getAllFood } from "@/libs/api";
 import { FoodType } from "@/types/foodType";
 import Head from "next/head";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 
 interface EventDetailPagePops {
@@ -14,13 +14,14 @@ function LoadingFallback() {
 }
 
 export default function EventDetailPage({ events }: EventDetailPagePops) {
-  const [eventData, setEventData] = useState<FoodType[]>(events);
-  const { data, refetch } = useQuery({
+  // const [eventData, setEventData] = useState<FoodType[]>(events);
+  const { data: eventData } = useQuery({
     queryFn: () => getAllFood(),
     queryKey: ["getFood"],
-    onSuccess: () => {
-      setEventData(data);
-    },
+    initialData: events,
+    staleTime: 0,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
   });
 
   return (
@@ -29,11 +30,10 @@ export default function EventDetailPage({ events }: EventDetailPagePops) {
         <title>All Foods</title>
         <meta name="description" content="Find all the food" />
       </Head>
-      <Suspense fallback={<LoadingFallback />}>
-        <div className="mt-10">
-          <EventList items={eventData} listFor="modify" />
-        </div>
-      </Suspense>
+
+      <div className="mt-10">
+        <EventList items={eventData} listFor="modify" />
+      </div>
     </React.Fragment>
   );
 }
@@ -46,7 +46,7 @@ export async function getStaticProps() {
       props: {
         events: allEvents,
       },
-      revalidate: 60,
+      revalidate: 1,
     };
   } catch (error) {
     return {

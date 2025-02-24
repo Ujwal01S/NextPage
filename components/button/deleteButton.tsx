@@ -19,6 +19,7 @@ export default function DeleteButton({ id }: { id: string }) {
     mutationFn: () => deleteFood(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getFood"] });
+      // need to send success status from backend to reflect onSuccess
       setOpen(false);
     },
   });

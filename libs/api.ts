@@ -56,3 +56,19 @@ export const deleteFood = async (id: string) => {
         throw error;
     }
 };
+
+export const postFood = async (formData: FormData) => {
+    try {
+        const response = await fetch(`${baseUrl}/api/sharefood`, {
+            method: "POST",
+            body: formData, // Send as FormData
+        })
+        if (!response.ok) {
+            throw new Error(`Fail to post food`)
+        }
+        const data = await response.json();
+        return data
+    } catch (error) {
+        throw error
+    }
+}
